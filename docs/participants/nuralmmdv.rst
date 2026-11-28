@@ -89,25 +89,31 @@ pull requests on ``eclipse-score/logging``.
 Task 2.1: Clean documentation build
 -----------------------------------
 
-**Warnings:** ``rm -rf _build && bazel run //:docs`` on ``main`` reports
-0 warnings: the build ends with ``build succeeded.`` and the schema validation
-with ``0 warning(s)``. The list would be written to ``_build/warnings.txt``.
-The build runs Sphinx with ``-W``, so any warning would fail it. The message
-"the root module requires module version aspect_rules_lint@2.3.0, but got
-2.5.0" comes from Bazel's dependency resolution, not from the documentation
-build.
+**Warnings:** None. The clean build on ``main`` ended with
+``build succeeded.``, and the schema validation also reported 0 warnings.
+If there were any, they would end up in ``_build/warnings.txt``. Since the
+build runs with ``-W``, a single warning would already make it fail. The
+``aspect_rules_lint`` version message at the top is a Bazel warning about
+dependencies, not a documentation warning.
 
-**Why delete _build:** Sphinx builds incrementally and only re-reads changed
-files, so warnings from unchanged files are not reported again. A clean build
-reports the complete list and no stale output remains.
+**Why delete _build first:** Sphinx only rebuilds files that changed, so
+warnings from untouched files don't show up again on the next run. Starting
+from an empty ``_build`` is the only way to see the full picture.
 
-**pre-commit hooks:** ``pre-commit run --all-files`` runs: fix end of files,
-trim trailing whitespace, check that scripts with shebangs are executable,
-check that executables have shebangs, check for added large files, copyright
-headers (cr_checker), reuse lint-file, yamlfmt, bazel mod tidy and bazel mod
-deps lockfile check. A violation of any of them would not make
-``bazel run //:docs`` fail: Sphinx does not check file endings, whitespace,
-permissions, licence headers, YAML formatting or the lockfile (``.bazelrc``
-does not set ``--lockfile_mode=error``, so Bazel updates the lockfile
-silently). Only pre-commit finds them. The two checks complement each other,
-and CI runs both.
+**pre-commit:** All ten hooks passed (end of files, trailing whitespace, two
+shebang checks, large files, copyright headers, reuse, yamlfmt, bazel mod tidy
+and the lockfile check). None of them would break ``bazel run //:docs``:
+Sphinx doesn't care about whitespace, file permissions, licence headers or the
+lockfile. So these problems are only caught by pre-commit, and that's why CI
+runs both.
+
+fix end of files.........................................................Passed
+trim trailing whitespace.................................................Passed
+check that scripts with shebangs are executable..........................Passed
+check that executables have shebangs.....................................Passed
+check for added large files..............................................Passed
+Check and fix copyright headers with cr_checker..........................Passed
+reuse lint-file..........................................................Passed
+yamlfmt..................................................................Passed
+bazel mod tidy...........................................................Passed
+bazel mod deps lockfile check............................................Passed
