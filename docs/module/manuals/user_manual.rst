@@ -11,7 +11,6 @@
    #
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
-
 .. _user_manual:
 
 [Module Name] User Manual
@@ -24,8 +23,6 @@
    :safety: QM
    :security: NO
    :realizes: wp__module_user_manual[version==1]
-
-
 .. attention::
     Update the document metadata according to your needs.
 
@@ -73,7 +70,6 @@ Configuration Effects
 
 <Explain how the configuration settings affect the module's behavior, performance, and integration with other components. Include examples of typical configurations and their outcomes.>
 
-
 Examples
 ========
 
@@ -113,7 +109,6 @@ Integrating with Your Project
       )
 
 3. Include headers and compile your code
-
 
 Version History, Compatibility, and Troubleshooting
 ===================================================
