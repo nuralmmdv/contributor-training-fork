@@ -85,3 +85,29 @@ opened against the upstream repository.
 **For S-CORE:** I will use a fork. Contributions reach an S-CORE repository as
 pull requests from a branch in the contributor's fork; this is how I opened
 pull requests on ``eclipse-score/logging``.
+
+Task 2.1: Clean documentation build
+-----------------------------------
+
+**Warnings:** ``rm -rf _build && bazel run //:docs`` on ``main`` reports
+0 warnings: the build ends with ``build succeeded.`` and the schema validation
+with ``0 warning(s)``. The list would be written to ``_build/warnings.txt``.
+The build runs Sphinx with ``-W``, so any warning would fail it. The message
+"the root module requires module version aspect_rules_lint@2.3.0, but got
+2.5.0" comes from Bazel's dependency resolution, not from the documentation
+build.
+
+**Why delete _build:** Sphinx builds incrementally and only re-reads changed
+files, so warnings from unchanged files are not reported again. A clean build
+reports the complete list and no stale output remains.
+
+**pre-commit hooks:** ``pre-commit run --all-files`` runs: fix end of files,
+trim trailing whitespace, check that scripts with shebangs are executable,
+check that executables have shebangs, check for added large files, copyright
+headers (cr_checker), reuse lint-file, yamlfmt, bazel mod tidy and bazel mod
+deps lockfile check. A violation of any of them would not make
+``bazel run //:docs`` fail: Sphinx does not check file endings, whitespace,
+permissions, licence headers, YAML formatting or the lockfile (``.bazelrc``
+does not set ``--lockfile_mode=error``, so Bazel updates the lockfile
+silently). Only pre-commit finds them. The two checks complement each other,
+and CI runs both.
