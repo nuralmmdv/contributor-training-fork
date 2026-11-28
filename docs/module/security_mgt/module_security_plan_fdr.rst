@@ -36,7 +36,7 @@
 
 **1. Purpose**
 
-The purpose of this review checklist is to provide a guidence for reviewing the Security Plans for each module.
+The purpose of this review checklist is to provide a guidance for reviewing the Security Plans for each module.
 Each Module Security Plan shall have one checklist filled.
 
 **2. Checklist**
