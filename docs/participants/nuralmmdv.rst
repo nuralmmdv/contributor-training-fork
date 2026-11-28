@@ -117,3 +117,20 @@ reuse lint-file..........................................................Passed
 yamlfmt..................................................................Passed
 bazel mod tidy...........................................................Passed
 bazel mod deps lockfile check............................................Passed
+
+Task 2.4: defect/build-3
+------------------------
+
+``defect/build-3`` renames ``user_manual.rst`` to ``user_guide.rst``. I built
+``main`` first and then ``defect/build-3`` without deleting ``_build``. The
+build was green, but ``_build/module/manuals/`` had both ``user_guide.html``
+(new, 23:06) and ``user_manual.html`` (still from the ``main`` build, 22:58).
+
+The docs build is incremental: it writes pages for the sources that exist, but
+it never removes the output of a source that was deleted or renamed. So the old
+page stays behind and can still be opened, even though nothing in the sources
+points to it anymore. After ``rm -rf _build && bazel run //:docs`` on the same
+branch, ``user_manual.html`` was gone.
+
+That's the practical side of task 2.1: only a clean build shows what the
+sources really produce. The branch is not merged.
